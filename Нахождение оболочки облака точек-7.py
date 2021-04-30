@@ -66,23 +66,6 @@ def draw_going_from_left_to_down_lines(x_array, y_array, max_y_coordinate, max_x
                 # print('y_array_difference при одном значении', y_array_difference)
                 print('y_output_array при одном значении', y_output_array)
                 break
-            # elif x_condition > 1:
-            #     x_array_difference = np.delete(x_array_difference, np.where(y_array_difference == next_point[1]))
-            #     y_array_difference = np.delete(y_array_difference, np.where(y_array_difference == next_point[1]))
-            #     print('x_array_difference при больше чем одно значении у Х ', x_array_difference)
-            #     print('y_array_difference при больше чем одно значении у Х ', y_array_difference)
-            # elif y_condition > 1:
-            #     print('x_array_difference', x_array_difference)
-            #     print('y_array_difference', y_array_difference)
-            #     print('np.where(x_array_difference == next_point[0]) = ', np.where(x_array_difference == next_point[0]))
-            #     print('np.delete(y_array_difference, np.where(x_array_difference == next_point[0]))',
-            #           np.delete(y_array_difference, np.where(x_array_difference == next_point[0])))
-            #     print(next_point[0])
-            #     print(next_point[1])
-            #     y_array_difference = np.delete(y_array_difference, np.where(x_array_difference == next_point[0]))
-            #     x_array_difference = np.delete(x_array_difference, np.where(x_array_difference == next_point[0]))
-            #     print('x_array_difference при больше чем одно значении у Y ', x_array_difference)
-            #     print('y_array_difference при больше чем одно значении у Y ', y_array_difference)
             else:
                 print('Зашли в проверку else в условии - if next_point[0] == max_x_coordinate:')
                 x_output_array = np.append(next_point[0])
@@ -93,20 +76,22 @@ def draw_going_from_left_to_down_lines(x_array, y_array, max_y_coordinate, max_x
     # Отрисовка линий, без расчетов, если есть одинаковые крайние точки.
     print('Количество повторяющихся элементов с максимальным "Х" ', np.size(np.where(x_array == np.max(x_array))))
     if np.size(np.where(x_array == np.max(x_array))) > 1:
-        x_array_difference = np.arange(0, np.size(np.where(x_array == np.min(x_array))))
-        for j in range(0, np.size(y_array[np.where(x_array == np.min(x_array))])):
+        x_array_difference = np.arange(0, np.size(np.where(x_array == np.max(x_array))))
+        for j in range(0, np.size(y_array[np.where(x_array == np.max(x_array))])):
             x_array_difference[j] = max_x_coordinate
-        y_array_difference = np.array(y_array[np.where(x_array == np.min(x_array))])
-        y_array_difference = np.sort(y_drawing_array)
+        y_array_difference = np.array(y_array[np.where(x_array == np.max(x_array))])
+        y_array_difference = np.sort(y_array_difference)
         y_array_difference = y_array_difference[::-1]
         print('x_array_difference', x_array_difference)
         print('y_array_difference', y_array_difference)
 
         x_output_array = np.delete(x_output_array, -1)
+        x_output_array = np.delete(x_output_array, 0)
         y_output_array = np.delete(y_output_array, -1)
+        y_output_array = np.delete(y_output_array, 0)
 
-        np.append(x_output_array, x_array_difference)
-        np.append(y_output_array, y_array_difference)
+        x_output_array = np.append(x_output_array, x_array_difference)
+        y_output_array = np.append(y_output_array, y_array_difference)
 
     else:
         x_output_array = np.array(np.min(x_array))
@@ -115,7 +100,10 @@ def draw_going_from_left_to_down_lines(x_array, y_array, max_y_coordinate, max_x
     print('!!! x_output_array после проверки Х на минимум < ', x_output_array, ' > !!!')
     print('!!! x_output_array после проверки X на минимум < ', y_output_array, ' > !!!')
 
-    return x_output_array, y_output_array
+    start_point_for_next_step = np.array([x_drawing_array[-1], y_drawing_array[-1]])
+    print('start_point_for_next_step', start_point_for_next_step, '\n')
+
+    return x_output_array, y_output_array, start_point_for_next_step
 
 
 def calculate_of_cos(point_one, point_two, point_base):
@@ -282,8 +270,8 @@ def draw_spanning_line(x_array, y_array):
     x_array_output_points, y_array_output_points, start_point_for_next_step = \
         draw_going_from_left_to_up_lines(x_array, y_array, min_x_coordinate, max_y_coordinate)
     print('x_array_output_points после выполнения функции draw_going_from_left_to_up_lines', x_array_output_points)
-    print('y_array_output_points после выполнения функции draw_going_from_left_to_up_lines', y_array_output_points)
-    x, y = draw_going_from_left_to_down_lines(x_array, y_array,
+    print('y_array_output_points после выполнения функции draw_going_from_left_to_up_lines', y_array_output_points, '\n')
+    x, y, start_point_for_next_step = draw_going_from_left_to_down_lines(x_array, y_array,
                                               max_y_coordinate, max_x_coordinate, start_point_for_next_step)
     x_array_output_points = np.append(x_array_output_points, x)
     y_array_output_points = np.append(y_array_output_points, y)
@@ -319,4 +307,4 @@ def draw_points_and_lines():
 
 
 work_dict_of_points_cloud = draw_points_and_lines()
-print('work_dict_of_points_cloud', work_dict_of_points_cloud, type(work_dict_of_points_cloud))
+# print('work_dict_of_points_cloud', work_dict_of_points_cloud, type(work_dict_of_points_cloud))
