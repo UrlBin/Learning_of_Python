@@ -1,3 +1,6 @@
+# import time
+# import timeit
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -504,6 +507,15 @@ def draw_points_and_lines():
     plt.show()
 
     return x_coordinates_of_points, y_coordinates_of_points
+
+# Измерение времени модулем timer
+# start_time = time.time()
+# draw_points_and_lines()
+# print ("{:g} s".format(time.time() - start_time))
+
+# Измерение времени модулем timeit
+# my_timer = timeit.timeit(draw_points_and_lines, number=10)
+# print('my_timer', my_timer)
 
 
 work_dict_of_points_cloud = draw_points_and_lines()
