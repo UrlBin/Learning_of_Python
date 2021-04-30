@@ -1,17 +1,97 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-# count_of_points = 10
+count_of_points = 50
 cloud_of_points = []
 
-x_coordinates_of_points = np.array([30, 300, 30, 50, 210, 150, 40, 240, 80, 190, 240, 200, 30, 300, 80])
-y_coordinates_of_points = np.array([150, 40, 30, 220, 60, 190, 50, 120, 170, 230, 50, 30, 230, 100, 10])
-print('Старт! - Заданное облако точек (x_coordinates_of_points)', x_coordinates_of_points)
-print('Старт! - Заданное облако точек (y_coordinates_of_points)', y_coordinates_of_points)
+
+# Ручной ввод для проверки
+# x_coordinates_of_points = np.array([30, 300, 30, 50, 210, 150, 40, 240, 80, 190, 240, 200, 30, 300])
+# y_coordinates_of_points = np.array([150, 40, 80, 220, 60, 190, 50, 120, 170, 230, 50, 30, 230, 100])
+
+# Генерация случайных координат
+x_coordinates_of_points = np.random.randint(20, 300, count_of_points)
+y_coordinates_of_points = np.random.randint(20, 300, count_of_points)
+print('Старт! - Заданное облако точек (x_coordinates_of_points)', x_coordinates_of_points,
+      type(x_coordinates_of_points))
+print('Старт! - Заданное облако точек (y_coordinates_of_points)', y_coordinates_of_points,
+      type(y_coordinates_of_points))
 
 
-def draw_going_from_left_to_down_lines(x_array, y_array, max_y_coordinate, max_x_coordinate, start_point):
+def draw_going_from_right_to_left_and_up_lines(x_array, y_array,
+                                               min_x_coordinate, min_y_coordinate, start_point):
     print('Запуск функции "draw_going_from_left_to_down_lines"')
+    print('min_y_coordinate', min_y_coordinate)
+    print('min_x_coordinate', min_x_coordinate)
+
+    x_output_array = np.array([start_point[0]])
+    y_output_array = np.array([start_point[1]])
+
+    print('!!! x_output_array < ', x_output_array, ' > !!!')
+    print('!!! y_output_array < ', y_output_array, ' > !!!')
+
+    next_point = np.array([])
+    y_array_difference = np.delete(y_array, np.where(x_array > start_point[0]))
+    x_array_difference = np.delete(x_array, np.where(x_array > start_point[0]))
+    print('x_array_difference', x_array_difference)
+    print('y_array_difference', y_array_difference)
+
+    while True:
+        if np.size(y_output_array) > 0:
+            list_of_angle = list()
+            for i in range(0, len(x_array_difference)):
+                point_1 = (x_array_difference[i], y_array_difference[i])
+                # print('point_1', point_1)
+                point_2 = (np.max(x_array), y_output_array[0])
+                # print('point_2', point_2)
+                point_3 = (x_output_array[-1], y_output_array[-1])
+                # print('point_3', point_3)
+                list_of_angle.append(calculate_of_cos(point_1, point_2, point_3))
+            print('list_of_angle', list_of_angle, type(list_of_angle))
+
+            list_of_angle_in_degrees = np.arccos(list_of_angle) * 180 / np.pi
+            print('list_of_angle_in_degrees', list_of_angle_in_degrees, type(list_of_angle_in_degrees))
+            # print('Вывод максимального угла в градусах - ', np.max(list_of_angle_in_degrees))
+            index_next_point = np.where(list_of_angle_in_degrees == np.max(list_of_angle_in_degrees))
+            print('index_next_point', index_next_point)
+            next_point = np.int(x_array_difference[index_next_point]), np.int(y_array_difference[index_next_point])
+            print('next_point', next_point)
+
+            # x_output_array = np.append(x_output_array, next_point[0])
+            # y_output_array = np.append(y_output_array, next_point[1])
+            # print('x_output_array', x_output_array)
+            # print('y_output_array', y_output_array)
+
+            # x_condition = np.size(np.where(x_array_difference == next_point[0]))
+            # print('x_condition', x_condition)
+            # y_condition = np.size(np.where(y_array_difference == next_point[1]))
+            # print('y_condition', y_condition)
+            if next_point[0] == min_x_coordinate:
+                print('Зашли в проверку - next_point[0] == min_x_coordinate: сработал break')
+                x_output_array = np.append(x_output_array, next_point[0])
+                y_output_array = np.append(y_output_array, next_point[1])
+                print('x_output_array при одном значении', x_output_array)
+                print('y_output_array при одном значении', y_output_array)
+                break
+            else:
+                print('Зашли в проверку else в условии - if next_point[0] == min_x_coordinate:')
+                x_output_array = np.append(x_output_array, next_point[0])
+                y_output_array = np.append(y_output_array, next_point[1])
+                print('x_output_array при одном значении', x_output_array)
+                print('y_output_array при одном значении', y_output_array)
+
+    print('!!! x_output_array после проверки Х на максимум > ', x_output_array, ' > !!!')
+    print('!!! x_output_array после проверки X на максимум > ', y_output_array, ' > !!!')
+
+    start_point_for_next_step = np.array([x_output_array[-1], y_output_array[-1]])
+    print('start_point_for_next_step', start_point_for_next_step, '\n')
+
+    return x_output_array, y_output_array, start_point_for_next_step
+
+
+def draw_going_from_left_to_right_and_down_lines(x_array, y_array,
+                                                 max_y_coordinate, max_x_coordinate, start_point):
+    print('Запуск функции движения слева на права и вниз "draw_going_from_left_to_right_and_down_lines"')
     print('max_y_coordinate', max_y_coordinate)
     print('max_x_coordinate', max_x_coordinate)
 
@@ -33,7 +113,7 @@ def draw_going_from_left_to_down_lines(x_array, y_array, max_y_coordinate, max_x
             for i in range(0, len(x_array_difference)):
                 point_1 = (x_array_difference[i], y_array_difference[i])
                 # print('point_1', point_1)
-                point_2 = (0, x_output_array[-1])
+                point_2 = (0, y_output_array[-1])
                 # print('point_2', point_2)
                 point_3 = (x_output_array[-1], y_output_array[-1])
                 # print('point_3', point_3)
@@ -68,14 +148,14 @@ def draw_going_from_left_to_down_lines(x_array, y_array, max_y_coordinate, max_x
                 break
             else:
                 print('Зашли в проверку else в условии - if next_point[0] == max_x_coordinate:')
-                x_output_array = np.append(next_point[0])
-                y_output_array = np.append(next_point[1])
+                x_output_array = np.append(x_output_array, next_point[0])
+                y_output_array = np.append(y_output_array, next_point[1])
                 # print('x_output_array при одном значении', x_output_array)
                 # print('y_output_array при одном значении', y_output_array)
 
     # Отрисовка линий, без расчетов, если есть одинаковые крайние точки.
     print('Количество повторяющихся элементов с максимальным "Х" ', np.size(np.where(x_array == np.max(x_array))))
-    if np.size(np.where(x_array == np.max(x_array))) > 1:
+    if np.size(np.where(x_array == np.max(x_array))) > 0:
         x_array_difference = np.arange(0, np.size(np.where(x_array == np.max(x_array))))
         for j in range(0, np.size(y_array[np.where(x_array == np.max(x_array))])):
             x_array_difference[j] = max_x_coordinate
@@ -106,7 +186,8 @@ def draw_going_from_left_to_down_lines(x_array, y_array, max_y_coordinate, max_x
     return x_output_array, y_output_array, start_point_for_next_step
 
 
-def draw_going_from_right_to_down_lines(x_array, y_array, max_x_coordinate, min_y_coordinate, start_point):
+def draw_going_from_right_to_left_and_down_lines(x_array, y_array,
+                                                 max_x_coordinate, min_y_coordinate, start_point):
     print('Запуск функции движения с права на лево вниз "draw_going_from_right_to_down_lines"')
     print('max_x_coordinate', max_x_coordinate)
     print('min_y_coordinate', min_y_coordinate)
@@ -204,7 +285,6 @@ def draw_going_from_right_to_down_lines(x_array, y_array, max_x_coordinate, min_
     start_point_for_next_step = np.array([x_output_array[-1], y_output_array[-1]])
     print('start_point_for_next_step', start_point_for_next_step, '\n')
 
-
     return x_output_array, y_output_array, start_point_for_next_step
 
 
@@ -217,8 +297,8 @@ def calculate_of_cos(point_one, point_two, point_base):
     # print('vector_two', vector_two)
     scalar_multiplication = np.int(np.inner(vector_one, vector_two))
     # print('-- scalar_multiplication', scalar_multiplication, type(scalar_multiplication))
-    length_of_vector_one = (((point_one[0] - point_base[0])**2) + (point_one[1] - point_base[1])**2)**0.5
-    length_of_vector_two = (((point_two[0] - point_base[0])**2) + (point_two[1] - point_base[1])**2)**0.5
+    length_of_vector_one = (((point_one[0] - point_base[0]) ** 2) + (point_one[1] - point_base[1]) ** 2) ** 0.5
+    length_of_vector_two = (((point_two[0] - point_base[0]) ** 2) + (point_two[1] - point_base[1]) ** 2) ** 0.5
     multiply_of_vector = length_of_vector_one * length_of_vector_two
     # print('-- multiply_of_vector ', multiply_of_vector)
     if multiply_of_vector != 0 and scalar_multiplication != 0:
@@ -230,30 +310,30 @@ def calculate_of_cos(point_one, point_two, point_base):
     return cos_between_points
 
 
-def draw_going_from_left_to_up_lines(x_array, y_array, min_x_coordinate, max_y_coordinate):
-    print('Запуск функции "draw_going_from_left_to_up_lines"')
+def draw_going_from_left_to_right_and_up_lines(x_array, y_array, min_x_coordinate, max_y_coordinate):
+    print('Запуск функции движения слева на право вверх - "draw_going_from_left_to_right_and_up_lines"')
     print('min_x_coordinate', min_x_coordinate)
     print('max_y_coordinate', max_y_coordinate)
 
     # Отрисовка линий, без расчетов, если есть одинаковые крайние точки.
     print('Количество повторяющихся элементов с минимальным "Х" ', np.size(np.where(x_array == np.min(x_array))))
     if np.size(np.where(x_array == np.min(x_array))) > 1:
-        x_drawing_array = np.arange(0, np.size(np.where(x_array == np.min(x_array))))
+        x_output_array = np.arange(0, np.size(np.where(x_array == np.min(x_array))))
         for j in range(0, np.size(y_array[np.where(x_array == np.min(x_array))])):
-            x_drawing_array[j] = min_x_coordinate
-        y_drawing_array = np.array(y_array[np.where(x_array == np.min(x_array))])
-        y_drawing_array = np.sort(y_drawing_array)
+            x_output_array[j] = min_x_coordinate
+        y_output_array = np.array(y_array[np.where(x_array == np.min(x_array))])
+        y_output_array = np.sort(y_output_array)
 
     else:
-        x_drawing_array = np.array(np.min(x_array))
-        y_drawing_array = np.array(y_array[np.where(x_array == np.min(x_array))])
+        x_output_array = np.array([np.min(x_array)])
+        y_output_array = np.array(y_array[np.where(x_array == np.min(x_array))])
 
-    print('!!! x_drawing_array после проверки Х на минимум < ', x_drawing_array, ' > !!!')
-    print('!!! y_drawing_array после проверки X на минимум < ', y_drawing_array, ' > !!!')
+    print('!!! x_output_array после проверки Х на минимум < ', x_output_array, ' > !!!')
+    print('!!! y_output_array после проверки X на минимум < ', y_output_array, ' > !!!')
 
     # Закончили с определением крайних экстремумов, дальше расчитываем следующие точки, где угол будет максимальным
 
-    print('np.size(x_drawing_array - ) ', np.size(x_drawing_array))
+    print('np.size(x_output_array - ) ', np.size(x_output_array))
     next_point = np.array([])
     x_array_difference = np.copy(x_array)
     y_array_difference = np.copy(y_array)
@@ -264,14 +344,14 @@ def draw_going_from_left_to_up_lines(x_array, y_array, min_x_coordinate, max_y_c
     print('y_array_difference', y_array_difference)
 
     while True:
-        if np.size(y_drawing_array) > 1:
+        if np.size(y_output_array) > 0:
             list_of_angle = list()
             for i in range(0, len(x_array_difference)):
                 point_1 = (x_array_difference[i], y_array_difference[i])
                 # print('point_1', point_1)
-                point_2 = (x_drawing_array[-1], 0)
+                point_2 = (x_output_array[-1], 0)
                 # print('point_2', point_2)
-                point_3 = (x_drawing_array[-1], y_drawing_array[-1])
+                point_3 = (x_output_array[-1], y_output_array[-1])
                 # print('point_3', point_3)
                 list_of_angle.append(calculate_of_cos(point_1, point_2, point_3))
             print('list_of_angle', list_of_angle, type(list_of_angle))
@@ -284,10 +364,10 @@ def draw_going_from_left_to_up_lines(x_array, y_array, min_x_coordinate, max_y_c
             next_point = np.int(x_array_difference[index_next_point]), np.int(y_array_difference[index_next_point])
             print('next_point', next_point)
 
-            x_drawing_array = np.append(x_drawing_array, next_point[0])
-            y_drawing_array = np.append(y_drawing_array, next_point[1])
-            print('x_drawing_array', x_drawing_array)
-            print('y_drawing_array', y_drawing_array)
+            x_output_array = np.append(x_output_array, next_point[0])
+            y_output_array = np.append(y_output_array, next_point[1])
+            print('x_output_array', x_output_array)
+            print('y_output_array', y_output_array)
 
         x_condition = np.size(np.where(x_array_difference == next_point[0]))
         print('x_condition', x_condition)
@@ -333,30 +413,30 @@ def draw_going_from_left_to_up_lines(x_array, y_array, min_x_coordinate, max_y_c
         for m in x_storage_of_extremum:
             print('Значение m - ', m)
             print('Проверка на нахождение алогичных точек в двух массивах - ',
-                  m in x_drawing_array)
-            if m in x_drawing_array:
+                  m in x_output_array)
+            if m in x_output_array:
                 print('Зашли в цикл удаления повторяющихся элементов.')
                 y_storage_of_extremum = np.delete(y_storage_of_extremum, 0)
                 x_storage_of_extremum = np.delete(x_storage_of_extremum, np.where(x_storage_of_extremum == m))
         print('Массив X после удаления повторяющихся элементов x_storage_of_extremum', x_storage_of_extremum)
         print('Массив Y после удаления повторяющихся элементов y_storage_of_extremum', y_storage_of_extremum)
-        x_drawing_array = np.sort(x_drawing_array)
+        x_output_array = np.sort(x_output_array)
         print('Отсортированный массив x_storage_of_extremum - ', x_storage_of_extremum)
 
-        x_drawing_array = np.concatenate([x_drawing_array, x_storage_of_extremum])
-        y_drawing_array = np.concatenate([y_drawing_array, y_storage_of_extremum])
+        x_output_array = np.concatenate([x_output_array, x_storage_of_extremum])
+        y_output_array = np.concatenate([y_output_array, y_storage_of_extremum])
 
     else:
-        y_drawing_array = np.concatenate(y_drawing_array, np.array(np.max(y_array)))
-        x_drawing_array = np.concatenate(x_drawing_array, np.array(x_array[np.where(y_array == np.max(y_array))]))
+        y_output_array = np.append(y_output_array, next_point[1])
+        x_output_array = np.append(x_output_array, next_point[0])
 
-    print('!!! x_drawing_array после проверки Y на минимум < ', x_drawing_array, ' > !!!')
-    print('!!! y_drawing_array после проверки Y на минимум < ', y_drawing_array, ' > !!!')
+    print('!!! x_output_array после проверки Y на минимум < ', x_output_array, ' > !!!')
+    print('!!! y_output_array после проверки Y на минимум < ', y_output_array, ' > !!!')
 
-    start_point_for_next_step = np.array([x_drawing_array[-1], y_drawing_array[-1]])
+    start_point_for_next_step = np.array([x_output_array[-1], y_output_array[-1]])
     print('start_point_for_next_step', start_point_for_next_step, '\n')
 
-    return x_drawing_array, y_drawing_array, start_point_for_next_step
+    return x_output_array, y_output_array, start_point_for_next_step
 
 
 def draw_spanning_line(x_array, y_array):
@@ -370,25 +450,33 @@ def draw_spanning_line(x_array, y_array):
     y_array_output_points = np.array([])
 
     x_array_output_points, y_array_output_points, start_point_for_next_step = \
-        draw_going_from_left_to_up_lines(x_array, y_array, min_x_coordinate, max_y_coordinate)
-    print('x_array_output_points после выполнения функции draw_going_from_left_to_up_lines', x_array_output_points)
-    print('y_array_output_points после выполнения функции draw_going_from_left_to_up_lines', y_array_output_points, '\n')
+        draw_going_from_left_to_right_and_up_lines(x_array, y_array, min_x_coordinate, max_y_coordinate)
+    print('x_array_output_points после выполнения функции draw_going_from_left_to_up_lines',
+          x_array_output_points)
+    print('y_array_output_points после выполнения функции draw_going_from_left_to_up_lines',
+          y_array_output_points, '\n')
     x, y, start_point_for_next_step = \
-        draw_going_from_left_to_down_lines(x_array, y_array,
-                                              max_y_coordinate, max_x_coordinate, start_point_for_next_step)
+        draw_going_from_left_to_right_and_down_lines(x_array, y_array,
+                                                     max_y_coordinate, max_x_coordinate, start_point_for_next_step)
     x_array_output_points = np.append(x_array_output_points, x)
     y_array_output_points = np.append(y_array_output_points, y)
 
     x2, y2, start_point_for_next_step = \
-        draw_going_from_right_to_down_lines(x_array, y_array,
-                                            max_x_coordinate, min_y_coordinate, start_point_for_next_step)
+        draw_going_from_right_to_left_and_down_lines(x_array, y_array,
+                                                     max_x_coordinate, min_y_coordinate, start_point_for_next_step)
 
     x_array_output_points = np.append(x_array_output_points, x2)
     y_array_output_points = np.append(y_array_output_points, y2)
 
+    x3, y3, start_point_for_next_step = \
+        draw_going_from_right_to_left_and_up_lines(x_array, y_array,
+                                                   min_x_coordinate, min_y_coordinate, start_point_for_next_step)
+
+    x_array_output_points = np.append(x_array_output_points, x3)
+    y_array_output_points = np.append(y_array_output_points, y3)
+
     if start_point_for_next_step[0] != x_array_output_points[0] \
             and start_point_for_next_step[1] != y_array_output_points[1]:
-
         x_array_output_points = np.append(x_array_output_points, x_array_output_points[0])
         y_array_output_points = np.append(y_array_output_points, y_array_output_points[0])
 
