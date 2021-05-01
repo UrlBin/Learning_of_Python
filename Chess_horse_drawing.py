@@ -22,19 +22,30 @@ while running:
 
     # Draw a solid blue circle in the center
     for i in range(0, number_of_fealds):
-        count_x = dim_of_rec*i
-        count_y = dim_of_rec*i + dim_of_rec
-        count_x_1 = count_x
-        count_y_1 = count_y
-        for j in range(0, number_of_fealds):
-            if j % 2 == 0:
-                pygame.draw.rect(screen, (0, 0, 0), (count_x, count_x_1, count_y, count_y_1))
-                count_x += dim_of_rec
-                count_y += dim_of_rec
-            else:
-                pygame.draw.rect(screen, (255, 255, 255), (count_x, count_x_1, count_y, count_y_1))
-                count_x += dim_of_rec
-                count_y += dim_of_rec
+        count_x_i = 0
+        count_y_i = dim_of_rec*i
+        count_x_j = dim_of_rec
+        count_y_j = dim_of_rec*(i + 1)
+        if i%2 == 0:
+            for j in range(0, number_of_fealds):
+                if j % 2 == 0:
+                    pygame.draw.rect(screen, (0, 0, 0), (count_x_i, count_y_i, count_x_j, count_y_j))
+                    count_x_i += dim_of_rec
+                    count_x_j += dim_of_rec
+                else:
+                    pygame.draw.rect(screen, (255, 255, 255), (count_x_i, count_y_i, count_x_j, count_y_j))
+                    count_x_i += dim_of_rec
+                    count_x_j += dim_of_rec
+        else:
+            for j in range(0, number_of_fealds):
+                if j % 2 == 0:
+                    pygame.draw.rect(screen, (255, 255, 255), (count_x_i, count_y_i, count_x_j, count_y_j))
+                    count_x_i += dim_of_rec
+                    count_x_j += dim_of_rec
+                else:
+                    pygame.draw.rect(screen, (0, 0, 0), (count_x_i, count_y_i, count_x_j, count_y_j))
+                    count_x_i += dim_of_rec
+                    count_x_j += dim_of_rec
 
     # Flip the display
     pygame.display.flip()
