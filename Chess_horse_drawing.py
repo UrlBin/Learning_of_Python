@@ -58,17 +58,76 @@ class myButton:
         if self.count_x_i < mouse_active[0] < self.count_x_j:
             if self.count_y_i < mouse_active[1] < self.count_y_j:
                 if mouse_click[0] == True or mouse_click[2] == True:
-                    pygame.time.delay(50)
+                    pygame.time.delay(80)
                     if myButton.circle_bool == False and self.internal_circle_bool == False:
                         myButton.circle_bool = True
                         self.internal_circle_bool = True
-                        pygame.time.delay(50)
-                    else:
+                        pygame.time.delay(10)
+                    elif myButton.circle_bool == True and self.internal_circle_bool == True:
                         myButton.circle_bool = False
                         self.internal_circle_bool = False
-                        pygame.time.delay(50)
+                        pygame.time.delay(10)
+                    elif myButton.circle_bool == True and self.internal_circle_bool == False:
+                        for o in list_of_buttons:
+                            o.internal_circle_bool = False
+                            o.draw_rec()
+                            pygame.display.update()
+                            pygame.time.delay(2)
+                        self.internal_circle_bool = True
+                    else:
+                        self.internal_circle_bool = True
         if self.internal_circle_bool == True:
             pygame.draw.circle(self.screen, (0, 255, 0), self.coordinate_of_center, 20)
+            pygame.time.delay(5)
+
+            if 0 < (self.coordinate_of_center[0] + dim_of_rec*2) < width:
+                if 0 < (self.coordinate_of_center[1] + dim_of_rec) < height:
+                    pygame.draw.circle(self.screen, (0, 255, 255),
+                                       (self.coordinate_of_center[0] + dim_of_rec*2,
+                                        self.coordinate_of_center[1] + dim_of_rec), 20)
+
+            if 0 < (self.coordinate_of_center[0] + dim_of_rec*2) < width:
+                if 0 < (self.coordinate_of_center[1] - dim_of_rec) < height:
+                    pygame.draw.circle(self.screen, (0, 255, 255),
+                                       (self.coordinate_of_center[0] + dim_of_rec*2,
+                                        self.coordinate_of_center[1] - dim_of_rec), 20)
+
+            if 0 < (self.coordinate_of_center[0] - dim_of_rec*2) < width:
+                if 0 < (self.coordinate_of_center[1] + dim_of_rec) < height:
+                    pygame.draw.circle(self.screen, (0, 255, 255),
+                                       (self.coordinate_of_center[0] - dim_of_rec*2,
+                                        self.coordinate_of_center[1] + dim_of_rec), 20)
+
+            if 0 < (self.coordinate_of_center[0] - dim_of_rec*2) < width:
+                if 0 < (self.coordinate_of_center[1] - dim_of_rec) < height:
+                    pygame.draw.circle(self.screen, (0, 255, 255),
+                                       (self.coordinate_of_center[0] - dim_of_rec * 2,
+                                        self.coordinate_of_center[1] - dim_of_rec), 20)
+
+            if 0 < (self.coordinate_of_center[0] + dim_of_rec) < width:
+                if 0 < (self.coordinate_of_center[1] + dim_of_rec*2) < height:
+                    pygame.draw.circle(self.screen, (0, 255, 255),
+                                       (self.coordinate_of_center[0] + dim_of_rec,
+                                        self.coordinate_of_center[1] + dim_of_rec*2), 20)
+
+            if 0 < (self.coordinate_of_center[0] + dim_of_rec) < width:
+                if 0 < (self.coordinate_of_center[1] - dim_of_rec*2) < height:
+                    pygame.draw.circle(self.screen, (0, 255, 255),
+                                       (self.coordinate_of_center[0] + dim_of_rec,
+                                        self.coordinate_of_center[1] - dim_of_rec*2), 20)
+
+            if 0 < (self.coordinate_of_center[0] - dim_of_rec) < width:
+                if 0 < (self.coordinate_of_center[1] + dim_of_rec*2) < height:
+                    pygame.draw.circle(self.screen, (0, 255, 255),
+                                       (self.coordinate_of_center[0] - dim_of_rec,
+                                        self.coordinate_of_center[1] + dim_of_rec*2), 20)
+
+            if 0 < (self.coordinate_of_center[0] - dim_of_rec) < width:
+                if 0 < (self.coordinate_of_center[1] - dim_of_rec*2) < height:
+                    pygame.draw.circle(self.screen, (0, 255, 255),
+                                       (self.coordinate_of_center[0] - dim_of_rec,
+                                        self.coordinate_of_center[1] - dim_of_rec*2), 20)
+
 
 screen.fill((255, 255, 255))
 
@@ -140,6 +199,12 @@ while running:
 
     for n in list_of_buttons:
         n.draw_circle()
+        # if myButton.circle_bool == False and n.internal_circle_bool == False:
+        #     n.internal_circle_bool = True
+        #     myButton.circle_bool = True
+        # else:
+        #     n.internal_circle_bool = True
+        #     myButton.circle_bool = True
 
     # Flip the display
     pygame.display.flip()
