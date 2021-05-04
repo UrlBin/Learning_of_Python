@@ -8,8 +8,12 @@ height = dim_of_rec*number_of_fealds + 30
 pygame.init()
 
 # Set up the drawing window
+elephant = pygame.image.load("elephant.png")
+elephant = pygame.transform.scale(elephant, (dim_of_rec - 10, dim_of_rec - 10))
+
 screen = pygame.display.set_mode([width, height])
 pygame.display.set_caption('Демонстрация ходов фигуры КОНЬ на доске')
+pygame.display.set_icon(pygame.image.load("chess.png"))
 clock = pygame.time.Clock()
 FPS = 60
 black = (0, 0, 0)
@@ -77,7 +81,10 @@ class myButton:
                     else:
                         self.internal_circle_bool = True
         if self.internal_circle_bool == True:
-            pygame.draw.circle(self.screen, (0, 255, 0), self.coordinate_of_center, 20)
+            # pygame.draw.circle(self.screen, (0, 255, 0), self.coordinate_of_center, 20)
+
+            coordinates_of_elephant = self.coordinate_of_center
+            screen.blit(elephant, (coordinates_of_elephant[0] - dim_of_rec/2 + 5, coordinates_of_elephant[1] - dim_of_rec/2 + 5))
             pygame.time.delay(5)
 
             if 0 < (self.coordinate_of_center[0] + dim_of_rec*2) < width:
