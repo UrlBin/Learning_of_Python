@@ -8,7 +8,7 @@ height = dim_of_rec*number_of_fealds + 30
 pygame.init()
 
 # Set up the drawing window
-elephant = pygame.image.load("elephant.png")
+elephant = pygame.image.load("elephant2.png")
 elephant = pygame.transform.scale(elephant, (dim_of_rec - 10, dim_of_rec - 10))
 
 screen = pygame.display.set_mode([width, height])
@@ -51,14 +51,11 @@ class myButton:
         # coordinate_of_center = ((self.count_x_i + self.count_x_j)/2, (self.count_y_i + self.count_y_j)/2)
         if self.count_x_i < mouse_active[0] < self.count_x_j:
             if self.count_y_i < mouse_active[1] < self.count_y_j:
-                # pygame.draw.rect(self.screen, focused_colour, self.coordinate, 5)
                 pygame.draw.rect(self.screen, focused_colour, self.coordinate, 5)
 
     def draw_circle(self):
-        # mouse_click = pygame.mouse.get_pressed()
         mouse_click = pygame.mouse.get_pressed()
         mouse_active = pygame.mouse.get_pos()
-        # coordinate_of_center = ((self.count_x_i + self.count_x_j)/2, (self.count_y_i + self.count_y_j)/2)
         if self.count_x_i < mouse_active[0] < self.count_x_j:
             if self.count_y_i < mouse_active[1] < self.count_y_j:
                 if mouse_click[0] == True or mouse_click[2] == True:
@@ -92,6 +89,12 @@ class myButton:
                     pygame.draw.circle(self.screen, (0, 255, 255),
                                        (self.coordinate_of_center[0] + dim_of_rec*2,
                                         self.coordinate_of_center[1] + dim_of_rec), 20)
+                    # pygame.draw.line(screen, (0, 255, 255), (self.coordinate_of_center),
+                    #                  (self.coordinate_of_center[0] + dim_of_rec,
+                    #                   self.coordinate_of_center[1]), 5)
+                    # pygame.draw.line(screen, (0, 255, 255), (self.coordinate_of_center),
+                    #                  (self.coordinate_of_center[0] + dim_of_rec * 2,
+                    #                   self.coordinate_of_center[1] + dim_of_rec), 5)
 
             if 0 < (self.coordinate_of_center[0] + dim_of_rec*2) < width:
                 if 0 < (self.coordinate_of_center[1] - dim_of_rec) < height:
